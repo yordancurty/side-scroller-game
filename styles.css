@@ -1,0 +1,16 @@
+#canvas {
+    border: 2px solid red;
+}
+
+.startButton{
+    background-color: rgb(12, 238, 31);
+    color: white;
+    border: transparent;
+    border-radius: 10%;
+    width: 60px;
+    height: 40px;
+}
+
+.title{
+    color: grey;
+}
