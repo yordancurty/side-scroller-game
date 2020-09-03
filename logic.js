@@ -198,6 +198,7 @@ function drawElements() {
 
   //image of the base
   ctx.drawImage(baseImg,0,basePos,canvasWidth,100)
+  
 }
 
 // 7.2 - function to involve all the little functions that need to be called constantly
