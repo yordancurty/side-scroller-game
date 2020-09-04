@@ -1,27 +1,45 @@
 // IMAGES AND AUDIOS
 let baseImg = new Image();
-baseImg.src = "./images/base.png";
+baseImg.src = "./images/baseGrassMud.jpg";
+let obstacleImg = new Image();
+obstacleImg.src = "./images/obstacle.png";
 
-
-
-
-
-
-
-
+const runImg1 = new Image();
+runImg1.src = "./images/run/run1.png";
+const runImg2 = new Image();
+runImg2.src = "./images/run/run2.png";
+const runImg3 = new Image();
+runImg3.src = "./images/run/run3.png";
+const runImg4 = new Image();
+runImg4.src = "./images/run/run4.png";
+const runImg5 = new Image();
+runImg5.src = "./images/run/run5.png";
+const runImg6 = new Image();
+runImg6.src = "./images/run/run6.png";
+const runImg7 = new Image();
+runImg7.src = "./images/run/run7.png";
+const runImg8 = new Image();
+runImg8.src = "./images/run/run8.png";
+const runImg9 = new Image();
+runImg9.src = "./images/run/run9.png";
+const runImg10 = new Image();
+runImg10.src = "./images/run/run10.png";
+const runImg11 = new Image();
+runImg11.src = "./images/run/run11.png";
+const runImg12 = new Image();
+runImg12.src = "./images/run/run12.png";
 
 // 1 - SETTING VARIABLES AND BASIS TO WORK WITH CANVAS
 
 // getting elements and atributes from HTML
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-const mainMenu = document.getElementById("mainMenu")
-let mainMenuDisplay = mainMenu.getAttribute("display")
-const startButton = document.getElementById("startButton")
+const mainMenu = document.getElementById("mainMenu");
+let mainMenuDisplay = mainMenu.getAttribute("display");
+const startButton = document.getElementById("startButton");
 let difficult = 0;
-const canvasWidth = canvas.getAttribute("width");
+const canvasWidth = parseInt(canvas.getAttribute("width"));
 const canvasHeight = canvas.getAttribute("height");
-
 
 //some variables needed for the game
 let animation;
@@ -31,12 +49,11 @@ const randomNumbGen = (max, min) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-let appearance1 = randomNumbGen(500, 300);
-let appearance2 = randomNumbGen(300, 200);
-let appearance3 = randomNumbGen(250, 150);
+let appearance1 = randomNumbGen(400, 250);
+let appearance2 = randomNumbGen(250, 175);
+let appearance3 = randomNumbGen(175, 100);
 
-let basePos = (0.75 * canvasHeight) + 40;
-
+let basePos = 0.75 * canvasHeight + 40;
 
 // 2 - CLASSES TO CREATE PLAYER AND ENEMIES\
 class Creature {
@@ -47,8 +64,8 @@ class Creature {
     this.speedX = 0;
     this.speedY = 0;
     this.jumps = 1;
-    this.width = width
-    this.height= height
+    this.width = width;
+    this.height = height;
   }
 
   left() {
@@ -68,11 +85,11 @@ class Creature {
   }
 
   gravity() {
-    this.speedY = 5;
+    this.speedY = 7;
   }
 
   jump() {
-    this.speedY = -5;
+    this.speedY = -7;
   }
   stopGravity() {
     this.speedY = 0;
@@ -88,17 +105,14 @@ const player = new Creature(50, 0.75 * canvasHeight, 40, 40);
 
 const obstacles = [];
 function generateObstacles() {
+  let randHeight = randomNumbGen(0.75 * canvasHeight, 0.62 * canvasHeight);
   obstacles.push(
-    new Creature(
-      canvasWidth,
-      randomNumbGen(0.75 * canvasHeight, 0.7 * canvasHeight, ),
-      25, 100
-    )
+    new Creature(canvasWidth, randHeight, 25, basePos - randHeight)
   );
   console.log("obstacle added");
 }
 
-// 4 - MOVING FUNCTION
+// 4 - MOVING FUNCTIONS
 
 document.addEventListener("keydown", function (e) {
   // console.log(`KEY ${e.keyCode} PRESSED `)
@@ -128,6 +142,28 @@ const movePlayer = (keycode) => {
   }
 };
 
+const moveBase = {
+  posX : 0,
+  baseSpeed : -4,
+
+  
+  updateBase : function(){
+    this.posX += this.baseSpeed;
+    this.posX %= canvasWidth
+    console.log(this.posX)
+  },
+  
+  drawBase : function(){
+    ctx.drawImage(baseImg, this.posX, basePos, canvasWidth, 200);
+    ctx.drawImage(baseImg, this.posX + canvasWidth ,basePos, canvasWidth, 200 )
+    console.log(canvasWidth);
+    console.log(baseImg.width)
+  }
+}
+
+
+
+
 // 5 - CHECK GAME OVER
 
 function crashWithPlayer(elem) {
@@ -139,38 +175,30 @@ function crashWithPlayer(elem) {
   );
 }
 
-
-
 const checkGameOver = () => {
   obstacles.forEach((elem, idx) => {
-    let crashed = crashWithPlayer(elem)
-    if(crashed){
-        //   console.log(`CRASHED!! - elem = ${elem} idx = ${idx} elemX = ${elem.x}`);
+    let crashed = crashWithPlayer(elem);
+    if (crashed) {
+      //   console.log(`CRASHED!! - elem = ${elem} idx = ${idx} elemX = ${elem.x}`);
 
-        gameOver()
-      
+      gameOver();
     }
   });
 };
 
 const gameOver = () => {
-    setInterval(() => {
-        ctx.clearRect(0,0,canvasWidth,canvasHeight)
-        ctx.font = '30px Arial'
-        ctx.fillStyle = "#f90404"
-        ctx.fillText(`POINTS : ${points}` ,50, 50);
-    }, 4000);
-    console.log("gameOVer CALLED ")
-    window.cancelAnimationFrame(animation);
-    
+  setInterval(() => {
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "#f90404";
+    ctx.fillText(`POINTS : ${points}`, 0.41 * canvasWidth, 0.5 * canvasHeight);
+    ctx.fillStyle = "#f90404";
+    ctx.fillText(`GAME OVER`, 0.405 * canvasWidth, 0.44 * canvasHeight);
+    ctx.drawImage(baseImg, -200, basePos, 1500, 200);
+  }, 4000);
+  console.log("gameOVer CALLED ");
+  window.cancelAnimationFrame(animation);
 };
-
-
-
-
-
-
-
 
 // 7 - ENGINE FOR THE GAME
 
@@ -179,40 +207,43 @@ function drawElements() {
   // console.log("drawElements CALLED")
 
   //floor
-  let floor = 0.75 * canvasHeight + 40;
-  ctx.rect(0, floor, canvasWidth, 200);
-
+  
   // player
-  ctx.rect(player.x, player.y, player.width, player.height);
+  if (counter % 16 <= 8)  {
+    ctx.drawImage(runImg1, player.x, player.y, player.width, player.height);
+  } else {
+    ctx.drawImage(runImg2, player.x, player.y, player.width, player.height);
+  }
+
 
   //obstacles
-  obstacles.forEach((elem, idx) => {
+  obstacles.forEach((elem) => {
     // console.log(`elem idx = ${idx}  - - -  elem X = ${elem.x} - - -  elem Y = ${elem.y}`)
     // console.log(`elem = ${elem}`)
-    ctx.rect(elem.x, elem.y, elem.width, elem.height);
-    elem.x -= 3;
+    ctx.fillStyle = "#797a79";
+    ctx.drawImage(obstacleImg, elem.x, elem.y, elem.width, elem.height);
+    elem.x -= 4;
     if (elem.x < 0) {
       obstacles.shift();
     }
   });
 
-  //image of the base
-  ctx.drawImage(baseImg,0,basePos,canvasWidth,100)
-  
 }
 
 // 7.2 - function to involve all the little functions that need to be called constantly
 function startGame() {
   // console.log("startGame CALLED")
-  
+
   counter += 1;
-  
-  console.log(points)
-  
-  ctx.beginPath();
+
+  console.log(points);
+
+ 
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
   drawElements();
-  ctx.stroke();
+  moveBase.drawBase()
+  moveBase.updateBase()
+
   movePlayer();
   movePlayerSmoother();
 
@@ -222,25 +253,24 @@ function startGame() {
   }
 
   // COUNT AND PRINT POINTS
-  points = Math.floor(counter/20)
-  ctx.font = '30px Arial'
-  ctx.fillStyle = "#0CEE1F"
-  ctx.fillText(`POINTS : ${points}` ,515, 450);
+  points = Math.floor(counter / 20);
+  ctx.font = "30px Arial";
+  ctx.fillStyle = "#0CEE1F";
+  ctx.fillText(`POINTS : ${points}`, 0.8 * canvasWidth, 0.1 * canvasHeight);
 
-
-  //   if(counter < 1000){
-  if (counter % appearance1 == 0 || counter == 0) {
-    generateObstacles();
+  if (counter < 1000) {
+    if (counter % appearance1 == 0 || counter == 0) {
+      generateObstacles();
+    }
+  } else if (counter >= 1000) {
+    if (counter % appearance2 == 0) {
+      generateObstacles();
+    }
+  } else if (counter > 2000) {
+    if (counter % appearance3 == 0) {
+      generateObstacles();
+    }
   }
-  //   }else if(counter > 900){
-  //     if ( counter % 200 == 0){
-  //      generateObstacles();
-  //     }
-  //   }else if(counter > 2000){
-  //     if ( counter % 150 == 0){
-  //      generateObstacles();
-  //     }
-  //   }
 
   console.log(obstacles);
 
@@ -248,16 +278,14 @@ function startGame() {
   checkGameOver();
 }
 
-
-
 // setInterval(() => {
 //     startGame()
 // }, 16);
 
 startButton.onclick = () => {
-  console.log("START BUTTON PRESSED")
+  console.log("START BUTTON PRESSED");
   document.getElementById("mainMenu").style.display = "none";
-  document.getElementById("canvas").style.display = "block"
+  document.getElementById("canvas").style.display = "block";
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
   window.requestAnimationFrame(startGame);
 };
