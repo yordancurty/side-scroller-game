@@ -49,9 +49,9 @@ const randomNumbGen = (max, min) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-let appearance1 = randomNumbGen(400, 250);
-let appearance2 = randomNumbGen(250, 175);
-let appearance3 = randomNumbGen(175, 100);
+let appearance1 = randomNumbGen(350, 200);
+let appearance2 = randomNumbGen(200, 155);
+let appearance3 = randomNumbGen(155, 100);
 
 let basePos = 0.75 * canvasHeight + 40;
 
